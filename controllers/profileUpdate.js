@@ -2,6 +2,36 @@ const User = require("../models/User");
 const { baseURL } = process.env;
 
 module.exports = {
+  getProfile: async (req, res) => {
+    try {
+      const { id } = req.params;
+      await User.findById(id).then((user) =>
+        res.status(200).json({ msg: "Profile Retreived Successfully", user })
+      );
+    } catch (err) {
+      return res.status(404).json({
+        msg: "User Not Found",
+        error: err,
+      });
+    }
+  },
+  deleteProfile: async (req, res) => {
+    try {
+      const { id } = req.params;
+      await User.findByIdAndDelete(id).then((user) => {
+        if (user) {
+          res.status(200).json({ msg: "User Deleted Successfully", user });
+        }
+        else {res.status(404).json({ msg: "User Not Found"});}
+      });
+    } catch (err) {
+      return res.status(403).json({
+        msg: "Profile Not Deleted",
+        error: err,
+        
+      });
+    }
+  },
   profileUpdate: async (req, res) => {
     try {
       const { id, name, phone, email } = req.body;

@@ -6,7 +6,7 @@ const {
   resetPassword,
 } = require("./auth/change-password");
 const { deleteUser } = require("./auth/deleteUser");
-const { profileUpdate, imageUpdate, getAvatars } = require("./profileUpdate");
+const { profileUpdate, imageUpdate, getAvatars, getProfile, deleteProfile } = require("./profileUpdate");
 const {
   getCategories,
   addCategory,
@@ -226,12 +226,14 @@ module.exports = {
   deleteChallengeQuestionOption,
   updateChallengeQuestion,
   updateChallengeAnswer,
+  getProfile,
   toggleChallengeStatus,
   checkChallengeAndGetQuestions,
   updateChallengeGift,
   addChallengeWinners,
   getLeaderBoard,
   getChallengeRank,
+  deleteProfile,
   getStoreLink,
   updateStoreLink,
   getStaticPage,

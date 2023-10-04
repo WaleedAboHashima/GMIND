@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { profileUpdate, imageUpdate, getAvatars } = require("../controllers");
+const { profileUpdate, imageUpdate, getAvatars, getProfile, deleteProfile } = require("../controllers");
 
 // @Desc Update Profile Data
 // @Resquest [POST]
@@ -17,4 +17,6 @@ router.post("/update/image", imageUpdate);
 // @Route /api/profile/avatar/all
 router.get("/avatar/all", getAvatars);
 
+router.get('/:id', getProfile);
+router.delete('/delete/:id', deleteProfile)
 module.exports = router;
