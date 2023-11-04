@@ -7,11 +7,11 @@ exports.ForgetHandler = asyncHandler(async (req, res) => {
   const { email } = req.body;
   try {
     if (!emailRegex.test(email)) {
-      res.status(400).json({ message: "Invalid email." });
+      res.status(200).json({ success: false, message: "Invalid email." });
     } else {
       const findOne = await User.findOne({ email });
       if (!findOne) {
-        res.status(403).json({ message: "Email does not exist." });
+        res.status(200).json({success: false, message: "Email does not exist." });
       } else {
         const OTP = await SendForgetOTP(email);
         if (!OTP) {
@@ -22,7 +22,7 @@ exports.ForgetHandler = asyncHandler(async (req, res) => {
       }
     }
   } catch (err) {
-    res.status(500).json({ message: err });
+    res.status(200).json({ success: false, message: err });
   }
 });
 
@@ -64,22 +64,22 @@ exports.HumanOTPCheck = asyncHandler(async (req, res) => {
 exports.OTPCheck = asyncHandler(async (req, res) => {
   const { OTP, email } = req.body;
   if (!email || !OTP)
-    res.status(404).json({ message: "All Fields Are Required" });
+    res.status(200).json({success: false, message: "All Fields Are Required" });
   else {
     try {
       const validate = await VerifyOTP(OTP, email);
       const user = await User.findOne({ email });
       if (!user) {
-        res.status(403).json({ message: "Can't Find Your Email." });
+        res.status(200).json({success: false, message: "Can't Find Your Email." });
       } else {
         if (!validate) {
-          res.status(403).json({ message: "Invalid Otp" });
+          res.status(200).json({success: false, message: "Invalid Otp" });
         } else {
           res.status(200).json({ id: user.id });
         }
       }
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(200).json({success: false, message: err.message });
     }
   }
 });
