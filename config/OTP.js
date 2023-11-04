@@ -27,7 +27,6 @@ exports.SendForgetOTP = async (email) => {
 exports.SendHumanOTP = async (email) => {
   const code = VsAuthenticator.generateTOTP(process.env.OTP_SECRET);
   OTPCashe[code] = email;
-
   const transporter = new mailer.createTransport({
     service: "gmail",
     auth: {

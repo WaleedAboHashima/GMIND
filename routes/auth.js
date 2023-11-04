@@ -12,6 +12,7 @@ const {
   ForgetHandler,
   OTPCheck,
   VerifyHuman,
+  HumanOTPCheck,
 } = require("../controllers/auth/forget");
 const { UpdatePassword } = require("../controllers/auth/change-password");
 const imgUploader = require("../middlewares/imgUploader");
@@ -25,6 +26,7 @@ router.post(
 );
 
 router.post("/register/verify", VerifyHuman);
+router.post("/register/otp", HumanOTPCheck);
 
 // @Desc Check Consecutive logged days
 // @Resquest [POST]
