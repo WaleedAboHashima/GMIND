@@ -1,7 +1,7 @@
 const User = require('../../models/User');
 const asyncHandler = require('express-async-handler');
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const { SendOTP, VerifyOTP } = require('../../config/OTP');
+const { SendForgetOTP, VerifyOTP, SendHumanOTP } = require('../../config/OTP');
 
 exports.ForgetHandler = asyncHandler(async (req, res) => {
     const { email } = req.body;
@@ -13,7 +13,30 @@ exports.ForgetHandler = asyncHandler(async (req, res) => {
         if (!findOne) {
           res.status(403).json({ message: "Email does not exist." });
         } else {
-          const OTP = await SendOTP(email);
+          const OTP = await SendForgetOTP(email);
+          if (!OTP) {
+            res.status(403).json({ message: "Failed to send the email" });
+          } else {
+            res.sendStatus(200);
+          }
+        }
+      }
+    } catch (err) {
+      res.status(500).json({ message: err });
+    }
+});
+
+exports.VerifyHuman = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    try {
+      if (!emailRegex.test(email)) {
+        res.status(400).json({ message: "Invalid email." });
+      } else {
+        const findOne = await User.findOne({ email });
+        if (!findOne) {
+          res.status(403).json({ message: "Email does not exist." });
+        } else {
+          const OTP = await SendHumanOTP(email);
           if (!OTP) {
             res.status(403).json({ message: "Failed to send the email" });
           } else {

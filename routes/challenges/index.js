@@ -9,9 +9,8 @@ const {
   GetChallengeCategory,
   AddChallengeCategory,
 } = require("../../controllers/challenges/category");
-const imgUploader = require("../../middlewares/imgUploader");
 
-const ImgUploader = require("../../middlewares/imgUploader");
+const imgUploader = require("../../middlewares/imgUploader");
 
 // @Desc Notifications APIs
 // @Resquest [ALL]

@@ -1,8 +1,5 @@
 const User = require("../../models/User");
 const { compareSync, hashSync } = require("bcrypt");
-const sendEmail = require("../../utils/sendEmail");
-const { baseURL } = process.env;
-const crypto = require("crypto");
 const asyncHandler = require("express-async-handler");
 module.exports = {
   UpdatePassword: asyncHandler(async (req, res) => {

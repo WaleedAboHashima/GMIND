@@ -8,13 +8,23 @@ const {
   deleteUser,
   checkConsecutiveLogin,
 } = require("../controllers");
-const { ForgetHandler, OTPCheck } = require("../controllers/auth/forget");
+const {
+  ForgetHandler,
+  OTPCheck,
+  VerifyHuman,
+} = require("../controllers/auth/forget");
 const { UpdatePassword } = require("../controllers/auth/change-password");
-const imgUploader = require('../middlewares/imgUploader')
+const imgUploader = require("../middlewares/imgUploader");
 // @Desc Register a User
 // @Resquest [POST]
 // @Route /api/auth/register
-router.post("/register",imgUploader.fields([{ name: "image" ,maxCount:1}]), register);
+router.post(
+  "/register",
+  imgUploader.fields([{ name: "image", maxCount: 1 }]),
+  register
+);
+
+router.post("/register/verify", VerifyHuman);
 
 // @Desc Check Consecutive logged days
 // @Resquest [POST]
@@ -54,6 +64,6 @@ router.post("/token", verifyToken, checkToken);
 router.delete("/delete-user", deleteUser);
 
 router.post("/forget", ForgetHandler);
-router.post("/otp", OTPCheck)
+router.post("/otp", OTPCheck);
 
 module.exports = router;
