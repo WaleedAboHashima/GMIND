@@ -6,10 +6,11 @@ module.exports = {
     try {
       const { id } = req.params;
       await User.findById(id).then((user) =>
-        res.status(200).json({ msg: "Profile Retreived Successfully", user })
+        res.status(200).json({ success: true, msg: "Profile Retreived Successfully", user })
       );
     } catch (err) {
       return res.status(404).json({
+        success: false,
         msg: "User Not Found",
         error: err,
       });

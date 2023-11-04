@@ -47,6 +47,7 @@ const {
   deductUserPoints,
   incrementUserLevel,
   getUserCategoryLevels,
+  deleteAdmin,
 } = require("./dashboard/users/users");
 const {
   adminLogin,
@@ -241,6 +242,7 @@ module.exports = {
   getRedeemRequests,
   addGoldReedeem,
   updateRedeemGoldStatus,
+  deleteAdmin,
   deleteRedeemRequest,
   getAvatars,
   checkConsecutiveLogin,

@@ -10,11 +10,11 @@ const {
 } = require("../controllers");
 const { ForgetHandler, OTPCheck } = require("../controllers/auth/forget");
 const { UpdatePassword } = require("../controllers/auth/change-password");
-
+const imgUploader = require('../middlewares/imgUploader')
 // @Desc Register a User
 // @Resquest [POST]
 // @Route /api/auth/register
-router.post("/register", register);
+router.post("/register",imgUploader.fields([{ name: "image" ,maxCount:1}]), register);
 
 // @Desc Check Consecutive logged days
 // @Resquest [POST]

@@ -12,7 +12,6 @@ const statusSchema = new mongoose.Schema(
       type: String,
       default: "جائزة",
     },
-
     min_points: {
       type: Number,
       default: 10

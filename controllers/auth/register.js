@@ -1,12 +1,17 @@
 const { hashSync } = require("bcrypt");
 const User = require("../../models/User");
+const cloudinary = require('cloudinary').v2;
 const referralCodes = require("referral-codes");
 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 module.exports = {
   register: async (req, res) => {
     try {
       const { name, email, phone, password, referral_code } = req.body;
-
       // Check Fields not Empty
       if (!name || !phone || !password) {
         return res.status(401).json({
@@ -63,11 +68,16 @@ module.exports = {
         length: 8,
       });
 
+      //Upload image
+      const image = (await cloudinary.uploader.upload(req.body.image))
+        .secure_url;
+
       // Create new user schema and save to Database
       const user = new User({
         name,
         email,
         phone,
+        image,
         password: hashedPassword,
         referral_code: newRef[0],
       });

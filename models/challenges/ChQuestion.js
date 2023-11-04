@@ -10,4 +10,3 @@ const questionSchema = new mongoose.Schema(
 );
 const ChQuestion = mongoose.model("ChQuestion", questionSchema);
 module.exports = ChQuestion;
-8

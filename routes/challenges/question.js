@@ -9,6 +9,7 @@ const {
   updateChallengeQuestion,
   updateChallengeAnswer,
 } = require("../../controllers");
+const { GetChallengeCategory } = require("../../controllers/challenges/category");
 
 // @Desc Get All Questions
 // @Resquest [GET]

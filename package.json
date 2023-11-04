@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npm install",
     "start": "node app.js",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,6 +20,7 @@
     "axios": "^1.2.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
+    "cloudinary": "^1.41.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
@@ -36,6 +38,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.7.8",
     "referral-codes": "^2.0.3",
+    "request-ip": "^3.3.0",
     "sharp": "^0.31.3",
     "ssh2": "^1.14.0",
     "swagger-ui-express": "^5.0.0",

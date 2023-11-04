@@ -7,6 +7,7 @@ const {
   deductUserPoints,
   incrementUserLevel,
   getUserCategoryLevels,
+  deleteAdmin,
 } = require("../../controllers");
 
 // @Desc Fetch All Users
@@ -18,6 +19,8 @@ router.get("/all", getAllUsers);
 // @Resquest [PATCH]
 // @Route /api/dashboard/user/update-status/:userId
 router.patch("/update-status/:userId", updateUserStatus);
+
+router.delete('/remove-admin/:userId', deleteAdmin);
 
 // @Desc Update User points
 // @Resquest [PATCH]

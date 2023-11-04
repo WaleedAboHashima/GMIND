@@ -14,6 +14,23 @@ module.exports = {
     }
   }, // Fetch ALL Users
 
+  deleteAdmin: async (req, res) => {
+    const { userId } = req.params;
+    try {
+      await User.findByIdAndDelete(userId).then((user) => {
+        if (!user)
+          return res
+            .status(404)
+            .json({ success: false, message: "Admin not found" });
+        else {
+          res.status(200).json({ success: true, user });
+        }
+      });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  },
+
   updateUserStatus: async (req, res) => {
     try {
       const { active } = req.body;
@@ -128,12 +145,10 @@ module.exports = {
 
       const idx = user.opened_levels.findIndex((x) => x.category == category);
 
-      res
-        .status(200)
-        .json({
-          success: true,
-          result: { category, level: user.opened_levels[idx].level },
-        });
+      res.status(200).json({
+        success: true,
+        result: { category, level: user.opened_levels[idx].level },
+      });
     } catch (err) {
       res.status(500).json({
         message: "Something Wen Wrong try again later!",

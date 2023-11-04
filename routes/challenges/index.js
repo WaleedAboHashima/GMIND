@@ -5,6 +5,13 @@ const {
   checkChallengeAndGetQuestions,
   updateChallengeGift,
 } = require("../../controllers");
+const {
+  GetChallengeCategory,
+  AddChallengeCategory,
+} = require("../../controllers/challenges/category");
+const imgUploader = require("../../middlewares/imgUploader");
+
+const ImgUploader = require("../../middlewares/imgUploader");
 
 // @Desc Notifications APIs
 // @Resquest [ALL]
@@ -35,5 +42,7 @@ router.get("/get-questions", checkChallengeAndGetQuestions);
 // @Resquest [PATCH]
 // @Route /api/challenge/update-gift
 router.patch("/update-gift", updateChallengeGift);
+router.get("/category", GetChallengeCategory);
+router.post("/category", imgUploader.fields([{ name: "image" ,maxCount:1}]), AddChallengeCategory);
 
 module.exports = router;
