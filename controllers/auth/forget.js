@@ -30,17 +30,17 @@ exports.VerifyHuman = asyncHandler(async (req, res) => {
   const { email } = req.body;
   try {
     if (!emailRegex.test(email)) {
-      res.status(400).json({ message: "Invalid email." });
+      res.status(200).json({success: false, message: "Invalid email." });
     } else {
       const OTP = await SendHumanOTP(email);
       if (!OTP) {
-        res.status(403).json({ message: "Failed to send the email" });
+        res.status(200).json({success: false, message: "Failed to send the email" });
       } else {
         res.sendStatus(200);
       }
     }
   } catch (err) {
-    res.status(500).json({ message: err });
+    res.status(200).json({success: false, message: err });
   }
 });
 
@@ -52,7 +52,7 @@ exports.HumanOTPCheck = asyncHandler(async (req, res) => {
     try {
       const validate = await VerifyOTP(OTP, email);
       if (!validate) {
-        res.status(403).json({ message: "Invalid Otp" });
+        res.status(200).json({success: false, message: "Invalid Otp" });
       } else {
         res.status(200).json({ success: true, message: "Valid OTP" });
       }
