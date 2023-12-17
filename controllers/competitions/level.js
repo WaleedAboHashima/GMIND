@@ -15,7 +15,6 @@ module.exports = {
             success: true,
             message: "Category Levels Retrieved Successfully",
             levels: categoryLevels.level,
-            result: categoryLevels.level,
           });
         })
         .catch((err) => {

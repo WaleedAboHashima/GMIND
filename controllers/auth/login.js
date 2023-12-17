@@ -11,7 +11,7 @@ module.exports = {
       await User.findOne(phone ? { phone } : { email }).then((user) => {
         //No user found
         if (!user) {
-          return res.status(404).json({
+          return res.status(200).json({
             success: false,
             message: phone ? "Phone Not Found" : "Email Not Found",
           });
@@ -19,7 +19,7 @@ module.exports = {
 
         //Incorrect password
         if (!compareSync(req.body.password, user.password)) {
-          return res.status(403).json({
+          return res.status(200).json({
             success: false,
             message: "Password Incorrect",
           });
@@ -27,7 +27,7 @@ module.exports = {
 
         // Check Activation
         if (!user.active)
-          return res.status(403).json({
+          return res.status(200).json({
             success: false,
             message:
               "This account has been suspended! Try contacting the admin",

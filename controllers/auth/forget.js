@@ -15,7 +15,7 @@ exports.ForgetHandler = asyncHandler(async (req, res) => {
       } else {
         const OTP = await SendForgetOTP(email);
         if (!OTP) {
-          res.status(403).json({ message: "Failed to send the email" });
+          res.status(200).json({success: true, message: "Failed to send the email" });
         } else {
           res.sendStatus(200);
         }
@@ -34,7 +34,7 @@ exports.VerifyHuman = asyncHandler(async (req, res) => {
     } else {
       const OTP = await SendHumanOTP(email);
       if (!OTP) {
-        res.status(200).json({success: false, message: "Failed to send the email" });
+        res.status(200).json({success: false, message: "Failed to send the email", OTP });
       } else {
         res.sendStatus(200);
       }

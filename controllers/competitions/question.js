@@ -18,7 +18,6 @@ module.exports = {
             success: true,
             message: "Level Questions Retrieved Successfully",
             questions: shuffled,
-            result: levelQuestions.question,
           });
         })
         .catch((err) => {

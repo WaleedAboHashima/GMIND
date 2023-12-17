@@ -147,11 +147,16 @@ const {
   deleteRedeemRequest,
 } = require("./gold/redeem");
 
+const {
+  completedLevel
+} = require('./points')
+
 module.exports = {
   register,
   login,
   changePassword,
   forgotPassword,
+  completedLevel,
   resetPassword,
   deleteUser,
   checkToken,

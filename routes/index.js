@@ -93,4 +93,6 @@ router.use("/static-pages-handler", require("./staticPagesHandler"));
 // @Route /api/redeem-gold
 router.use("/redeem-gold", require("./gold/redeem"));
 
+router.use("/points", require('./points'));
+
 module.exports = router;

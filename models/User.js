@@ -64,7 +64,14 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
-
+    EXP: {
+      type: Number,
+      default: 1,
+    },
+    NEXT_EXP_GOAL: {
+      type: Number,
+      default: 10000,
+    },
     active: { type: Boolean, default: true },
 
     last_login: {

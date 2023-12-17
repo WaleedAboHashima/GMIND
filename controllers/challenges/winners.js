@@ -18,7 +18,7 @@ module.exports = {
       }
 
       const user = await User.findById({ _id: userId });
-
+      
       const newWinner = new ChWinners({
         user_id: user._id,
         user_name: user.name,
