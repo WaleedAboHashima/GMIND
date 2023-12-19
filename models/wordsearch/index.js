@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 
 const wordSearch = new mongoose.Schema({
   image: {
-    Type: String,
+    type: String,
+    default: "https://www.scarlettebooks.com/wp-content/uploads/2019/08/question-mark-500x333.jpg"
   },
   question: {
-    Type: String,
+    type: String,
   },
   answer: {
     type: String,
@@ -13,4 +14,11 @@ const wordSearch = new mongoose.Schema({
   answer_def: {
     type: Array,
   },
+  prize: {
+    type: Number
+  }
 });
+
+const WORDSEARCH = mongoose.model("wordseach", wordSearch);
+
+module.exports = WORDSEARCH;

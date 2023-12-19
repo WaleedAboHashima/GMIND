@@ -70,7 +70,7 @@ const userSchema = new mongoose.Schema(
     },
     NEXT_EXP_GOAL: {
       type: Number,
-      default: 10000,
+      default: 1000,
     },
     active: { type: Boolean, default: true },
 

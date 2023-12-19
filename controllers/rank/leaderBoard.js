@@ -3,7 +3,7 @@ const User = require("../../models/User");
 module.exports = {
   getLeaderBoard: async (req, res) => {
     try {
-      const users = await User.find().sort({ points: "desc" });
+      const users = await User.find().sort({ gold: "desc" });
 
       res.status(200).json({
         success: true,

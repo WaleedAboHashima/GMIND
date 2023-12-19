@@ -2,7 +2,7 @@ const expressAsyncHandler = require("express-async-handler");
 const User = require("../../models/User");
 
 exports.levelCompleted = expressAsyncHandler(async (req, res) => {
-  const { userId, type } = req.params;
+  const { userId } = req.params;
   const { time, prize, score, max_score } = req.body;
   if (!time || !prize || !score || !max_score)
     return res
@@ -12,65 +12,49 @@ exports.levelCompleted = expressAsyncHandler(async (req, res) => {
   try {
     let penaltyPoints = Math.max(0, max_score - score);
     const foundUser = await User.findById(userId);
-    if (type === "challenges") {
-      switch (true) {
-        case time <= 10:
-          if (!penaltyPoints) {
-            foundUser.EXP += 500;
-            foundUser.points += prize;
-            if (foundUser.EXP > foundUser.NEXT_EXP_GOAL) {
-              levelUp = true;
-              foundUser.points += 200;
-              foundUser.level = foundUser.level + 1;
-              foundUser.EXP = 1;
-              foundUser.NEXT_EXP_GOAL += 1000;
-            }
-          } else {
-            let penaltyPrize = prize / max_score;
-            foundUser.points += penaltyPrize * score;
-            if (foundUser.EXP > foundUser.NEXT_EXP_GOAL) {
-              levelUp = true;
-              foundUser.level = foundUser.level + 1;
-              foundUser.EXP = 1;
-              foundUser.NEXT_EXP_GOAL += 1000;
-            } else {
-              foundUser.EXP += 250;
-            }
-          }
-          await foundUser.save();
-          res.status(200).json({
-            success: true,
-            message: "User points added successfully",
-            levelUp,
-          });
-          break;
-        default:
-          console.log("default");
-          break;
-        case 10 < time <= 15:
-          foundUser.EXP += 250;
-          foundUser.points += prize - 5;
-          if (foundUser.EXP > foundUser.NEXT_EXP_GOAL) {
-            levelUp = true;
-            foundUser.points += 10;
-            foundUser.level = foundUser.level + 1;
-            foundUser.EXP = 1;
-            foundUser.NEXT_EXP_GOAL += 1000;
-          }
-          await foundUser.save();
-          res.status(200).json({
-            success: true,
-            message: "User points added successfully",
-            levelUp,
-          });
-          break;
+    // switch (true) {
+    //   case time:
+    if (!penaltyPoints) {
+      foundUser.EXP += max_score * 5;
+      foundUser.points += prize ? prize : max_score;
+      if (foundUser.EXP > foundUser.NEXT_EXP_GOAL) {
+        levelUp = true;
+        foundUser.points += 200;
+        foundUser.level = foundUser.level + 1;
+        foundUser.EXP -= foundUser.NEXT_EXP_GOAL;
+        foundUser.NEXT_EXP_GOAL += 750;
+      }
+    } else {
+      let penaltyPrize = prize ? prize / max_score : 0;
+      foundUser.points += penaltyPrize ? penaltyPrize * score : score;
+      if (foundUser.EXP > foundUser.NEXT_EXP_GOAL) {
+        levelUp = true;
+        foundUser.points += 200;
+        foundUser.level = foundUser.level + 1;
+        foundUser.EXP -= foundUser.NEXT_EXP_GOAL;
+        foundUser.NEXT_EXP_GOAL += 750;
+      } else {
+        foundUser.EXP += 5 * score;
       }
     }
+    if (foundUser.points > 2000) {
+      foundUser.gold += 200;
+      foundUser.points -= 2000;
+    }
+    await foundUser.save();
+    res.status(200).json({
+      success: true,
+      message: "User points added successfully",
+      levelUp,
+    });
+    // break;
+    // default:
+    // break;
+    // }
   } catch (err) {
     console.log(err.message);
   }
 });
-
 
 // 2000 Points => 200 Gold
 // LEVELUP => 200 points
