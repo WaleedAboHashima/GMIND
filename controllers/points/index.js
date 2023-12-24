@@ -4,10 +4,6 @@ const User = require("../../models/User");
 exports.levelCompleted = expressAsyncHandler(async (req, res) => {
   const { userId } = req.params;
   const { time, prize, score, max_score } = req.body;
-  if (!time || !prize || !score || !max_score)
-    return res
-      .status(200)
-      .json({ success: false, message: "All fields are reqired" });
   let levelUp = false;
   try {
     let penaltyPoints = Math.max(0, max_score - score);
