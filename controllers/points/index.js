@@ -5,6 +5,8 @@ exports.levelCompleted = expressAsyncHandler(async (req, res) => {
   const { userId } = req.params;
   const { time, prize, score, max_score } = req.body;
   let levelUp = false;
+  let winningEXP = 0
+  let winningPoints = 0
   try {
     let penaltyPoints = Math.max(0, max_score - score);
     const foundUser = await User.findById(userId);
@@ -13,6 +15,8 @@ exports.levelCompleted = expressAsyncHandler(async (req, res) => {
     if (!penaltyPoints) {
       foundUser.EXP += max_score * 5;
       foundUser.points += prize ? prize : max_score;
+      winningEXP = max_score * 5;
+      winningPoints = prize ? prize : max_score;
       if (foundUser.EXP > foundUser.NEXT_EXP_GOAL) {
         levelUp = true;
         foundUser.points += 200;
@@ -23,6 +27,7 @@ exports.levelCompleted = expressAsyncHandler(async (req, res) => {
     } else {
       let penaltyPrize = prize ? prize / max_score : 0;
       foundUser.points += penaltyPrize ? penaltyPrize * score : score;
+      winningPoints = penaltyPrize ? penaltyPrize * score : score;
       if (foundUser.EXP > foundUser.NEXT_EXP_GOAL) {
         levelUp = true;
         foundUser.points += 200;
@@ -31,6 +36,7 @@ exports.levelCompleted = expressAsyncHandler(async (req, res) => {
         foundUser.NEXT_EXP_GOAL += 750;
       } else {
         foundUser.EXP += 5 * score;
+        winningEXP = score * 5;
       }
     }
     if (foundUser.points > 2000) {
@@ -41,6 +47,8 @@ exports.levelCompleted = expressAsyncHandler(async (req, res) => {
     res.status(200).json({
       success: true,
       message: "User points added successfully",
+      EXP : winningEXP,
+      points : winningPoints,
       levelUp,
     });
     // break;
