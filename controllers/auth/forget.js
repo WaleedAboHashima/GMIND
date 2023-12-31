@@ -75,7 +75,7 @@ exports.OTPCheck = asyncHandler(async (req, res) => {
         if (!validate) {
           res.status(200).json({success: false, message: "Invalid Otp" });
         } else {
-          res.status(200).json({ id: user.id });
+          res.status(200).json({ success: true, id: user.id });
         }
       }
     } catch (err) {
