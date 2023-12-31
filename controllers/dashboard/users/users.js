@@ -66,9 +66,10 @@ module.exports = {
 
   deductUserPoints: async (req, res) => {
     try {
-      const { points } = req.body;
+      const { gold } = req.body;
       const user = await User.findById({ _id: req.params.userId });
-      const newGold = user.gold - points;
+      // const newPoints = user.points - points;
+      const newGold = user.gold - gold;
 
       await User.findByIdAndUpdate(req.params.userId, { gold: newGold });
       const updatedUser = await User.findById({ _id: req.params.userId });
@@ -76,7 +77,7 @@ module.exports = {
       res.status(200).json({ success: true, result: updatedUser });
     } catch (err) {
       res.status(500).json({
-        message: "Something Wen Wrong try again later!",
+        message: "Something Went Wrong try again later!",
         ERROR: err,
       });
     }

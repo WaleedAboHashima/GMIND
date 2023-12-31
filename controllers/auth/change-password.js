@@ -4,23 +4,21 @@ const asyncHandler = require("express-async-handler");
 module.exports = {
   UpdatePassword: asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { newPassword, oldPassword } = req.body;
+    const { newPassword } = req.body;
     if (!id || !newPassword)
       res.status(403).json({ message: "All Fields Are Required." });
     else {
       try {
         const user = await User.findById(id);
-        const checkPassword = await compareSync(oldPassword, user.password);
-        if (checkPassword) {
-          const password = await hashSync(newPassword, 10);
-          const user = await User.findByIdAndUpdate(id, { password }).exec();
-          if (!user) {
-            res.status(404).json({ message: "User Not Found" });
-          } else {
-            res.status(200).json({success: true, message: "Password Successfully Updated." });
-          }
+        const hashedPassword = hashSync(newPassword, 10);
+        if (!user) {
+          res.status(404).json({ message: "User Not Found" });
         } else {
-          res.status(403).json({ success: false, message: "Incorrect Old Password." });
+          user.password = hashedPassword;
+          await user.save();
+          res
+            .status(200)
+            .json({ success: true, message: "Password Successfully Updated." });
         }
       } catch (err) {
         res.status(500).json({ message: err });
