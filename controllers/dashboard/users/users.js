@@ -48,10 +48,10 @@ module.exports = {
 
   updateUserPoints: async (req, res) => {
     try {
-      const { points } = req.body;
+      const { gold } = req.body;
 
       await User.findByIdAndUpdate(req.params.userId, {
-        $inc: { points: points, gold: points },
+        $inc: { gold: gold },
       });
       const updatedUser = await User.findById({ _id: req.params.userId });
 
