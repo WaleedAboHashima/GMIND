@@ -1,7 +1,8 @@
 const {
   AddQuestionToWordSearch,
   GetQuestions,
-  DeleteQuestion
+  DeleteQuestion,
+  EditQuestion
 } = require("../../controllers/wordsearch");
 
 const router = require("express").Router();
@@ -12,7 +13,7 @@ router.post(
   imgUploader.fields([{ name: "image", maxCount: 1 }]),
   AddQuestionToWordSearch
 );
-
+router.put("/question/:id", EditQuestion);
 router.get("/all/questions", GetQuestions);
 router.delete("/delete/question/:id", DeleteQuestion);
 

@@ -113,14 +113,15 @@ exports.DeleteQuestion = expressAsyncHandler(async (req, res) => {
     .json({ success: true, message: "Question deleted successfully" });
 });
 
-// exports.GetQuestions = expressAsyncHandler(async (req, res) => {
-//   try {
-//     await WORDSEARCH.find({}).then((questions) => {
-//       res
-//         .status(200)
-//         .json({ message: "Questions returned successfully", questions });
-//     });
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
+exports.EditQuestion = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { question, answer, prize } = req.body;
+  const updatedFields = {};
+  if (question) updatedFields.question = question;
+  if (answer) updatedFields.answer = answer;
+  if (prize) updatedFields.prize = prize;
+  await WORDSEARCH.findByIdAndUpdate(id, updatedFields, { new: true });
+  res
+    .status(200)
+    .json({ success: true, message: "Question updated successfully" });
+});
