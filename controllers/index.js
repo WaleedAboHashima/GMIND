@@ -6,7 +6,13 @@ const {
   resetPassword,
 } = require("./auth/change-password");
 const { deleteUser } = require("./auth/deleteUser");
-const { profileUpdate, imageUpdate, getAvatars, getProfile, deleteProfile } = require("./profileUpdate");
+const {
+  profileUpdate,
+  imageUpdate,
+  getAvatars,
+  getProfile,
+  deleteProfile,
+} = require("./profileUpdate");
 const {
   getCategories,
   addCategory,
@@ -147,9 +153,8 @@ const {
   deleteRedeemRequest,
 } = require("./gold/redeem");
 
-const {
-  completedLevel
-} = require('./points')
+const { completedLevel } = require("./points");
+const { get_wheel_prizes, redeem_wheel_prize } = require("./spinthewheel");
 
 module.exports = {
   register,
@@ -254,4 +259,6 @@ module.exports = {
   deductUserPoints,
   incrementUserLevel,
   getUserCategoryLevels,
+  get_wheel_prizes,
+  redeem_wheel_prize,
 };

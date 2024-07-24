@@ -7,19 +7,29 @@ module.exports = {
   login: asyncHandler(async (req, res) => {
     const { phone } = req.body;
     const { email } = req.body;
+    const lang = req.lang;
     try {
       await User.findOne(phone ? { phone } : { email }).then((user) => {
         //No user found
         if (!user) {
-          return res.status(200).json({
-            success: false,
-            message: phone ? "Phone Not Found" : "Email Not Found",
-          });
+          if (lang === "en") {
+            return res.status(404).json({
+              success: false,
+              message: phone ? "Phone Not Found" : "Email Not Found",
+            });
+          } else {
+            return res.status(404).json({
+              success: false,
+              message: phone
+                ? "لا يوجد حساب بهذا الهاتف"
+                : "لا يوجد حساب بهذا الايميل",
+            });
+          }
         }
 
         //Incorrect password
         if (!compareSync(req.body.password, user.password)) {
-          return res.status(200).json({
+          return res.status(403).json({
             success: false,
             message: "Password Incorrect",
           });
@@ -27,7 +37,7 @@ module.exports = {
 
         // Check Activation
         if (!user.active)
-          return res.status(200).json({
+          return res.status(403).json({
             success: false,
             message:
               "This account has been suspended! Try contacting the admin",
@@ -42,7 +52,7 @@ module.exports = {
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "10d" });
         delete user._doc.password;
 
-        return res.status(201).json({
+        return res.status(200).json({
           success: true,
           message: "Login Successful",
           token: token,
@@ -50,7 +60,7 @@ module.exports = {
         });
       });
     } catch (err) {
-      return res.status(501).json({
+      return res.status(500).json({
         success: false,
         message: "Something went wrong try again later!",
         ERROR: err,
@@ -67,11 +77,11 @@ module.exports = {
       const user = await User.findById({ _id: userId });
       if (user)
         res
-          .status(201)
+          .status(200)
           .json({ success: true, message: "Logged In", result: user });
       else res.status(401).json({ success: false, message: "Not Logged In" });
     } catch (err) {
-      return res.status(501).json({
+      return res.status(500).json({
         success: false,
         message: "Something went wrong try again later!",
         ERROR: err,

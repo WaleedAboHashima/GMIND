@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const ChallengeCategory = require("../../models/challenges/ChallengeCategory");
 const cloundinary = require("cloudinary").v2;
-
+require("dotenv").config();
 cloundinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,

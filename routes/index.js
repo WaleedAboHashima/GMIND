@@ -94,5 +94,6 @@ router.use("/static-pages-handler", require("./staticPagesHandler"));
 router.use("/redeem-gold", require("./gold/redeem"));
 
 router.use("/points", require('./points'));
+router.use('/wheel', require('./wheel'))
 router.use('/wordsearch' , require('./wordsearch'));
 module.exports = router;

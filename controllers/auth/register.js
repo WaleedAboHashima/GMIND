@@ -1,62 +1,85 @@
-const { hashSync } = require("bcrypt");
-const User = require("../../models/User");
-const cloudinary = require('cloudinary').v2;
+// Packages
+const requestIP = require("request-ip");
 const referralCodes = require("referral-codes");
+const { hashSync } = require("bcrypt");
 
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-});
+// Project dependencies
+const User = require("../../models/User");
+// const RegisteredDevices = require("../../models/Devices/RegisteredDevices");
+
 module.exports = {
   register: async (req, res) => {
     try {
       const { name, email, phone, password, referral_code } = req.body;
+
+      const deviceId = requestIP.getClientIp(req);
+
+      if (!deviceId) {
+        return res
+          .status(403)
+          .json({ success: false, message: "Device undefined" });
+      }
+
+      // Check if user already registered today
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      /* const checkRegUser = await RegisteredDevices.findOne({
+        device: deviceId,
+        lastRegistrationDate: { $gte: today },
+      });
+      if (checkRegUser) {
+        return res.status(200).json({
+          success: false,
+          message: "Registration Limit exceeded",
+        });
+      }
+*/
       // Check Fields not Empty
-      if (!name || !phone || !password) {
-        return res.status(401).json({
+      if (!name || !email || !password) {
+        return res.status(403).json({
           success: false,
           message: "Some Fields are Empty",
         });
       }
 
       // Check Phone Existance
-      const checkPhone = await User.findOne({
-        phone: phone,
-      });
-
-      if (checkPhone) {
-        return res.status(401).json({
-          success: false,
-          message: "Phone Exists",
-        });
-      }
-
-      if (email) {
-        // Check Email Existance
-        const checkEmail = await User.findOne({
-          email: email,
+      if (phone) {
+        const checkPhone = await User.findOne({
+          phone: phone,
         });
 
-        if (checkEmail) {
-          return res.status(401).json({
+        if (checkPhone) {
+          return res.status(409).json({
             success: false,
-            message: "Email Exists",
+            message: "Phone Exists",
           });
         }
+      }
+
+      // Check Email Existance
+      const checkEmail = await User.findOne({
+        email: email,
+      });
+
+      if (checkEmail) {
+        return res.status(409).json({
+          success: false,
+          message: "Email Exists",
+        });
       }
 
       // Check Ref code to give points to the user
       if (referral_code) {
         const user = await User.findOne({ referral_code }).catch((err) => {
-          return res.status(400).json({
+          return res.status(404).json({
             success: false,
             message: "Referral Code ERROR",
           });
         });
         if (user) {
           var newPoints = user.points + 5;
-          await User.findOneAndUpdate({ referral_code }, { points: newPoints });
+          var newUser = user.users_invited + 1;
+          await User.findOneAndUpdate({ referral_code }, { points: newPoints }, {users_invited: newUser});
         }
       }
 
@@ -67,31 +90,32 @@ module.exports = {
       const newRef = referralCodes.generate({
         length: 8,
       });
-
-      //Upload image
-      const image = (await cloudinary.uploader.upload(req.body.image))
-        .secure_url;
-
       // Create new user schema and save to Database
       const user = new User({
         name,
         email,
         phone,
-        image,
         password: hashedPassword,
         referral_code: newRef[0],
+        invited_by: referral_code && referral_code,
       });
       await user.save();
+      // .then(async () => {
+      //   const newDevice = new RegisteredDevices({
+      //     device: deviceId,
+      //     associatedUserEmail: email,
+      //     lastRegistrationDate: new Date(),
+      //   });
+
+      // await newDevice.save();
 
       // Respone a Success Message
-      return res.status(200).json({
+      res.status(201).json({
         success: true,
         message: "Register Successful",
-        result: user,
       });
     } catch (err) {
-      console.log("🚀 ~ file: register.js ~ line 84 ~ register: ~ err", err);
-      return res.status(501).json({
+      res.status(500).json({
         success: false,
         message: "Something went wrong try again later!",
         ERROR: err,

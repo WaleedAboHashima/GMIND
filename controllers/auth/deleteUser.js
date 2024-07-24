@@ -13,7 +13,7 @@ module.exports = {
         const token = req.headers.authorization.split(" ")[1];
 
         if (!token) {
-          return res.status(401).send({ msg: "Access Denied" });
+          return res.status(401).send({ msg: "UnAuthorized...Access Denied" });
         }
         const verfied = jwt.verify(token, tokeVerify);
         req.user = verfied;
@@ -47,7 +47,7 @@ module.exports = {
           });
         }
       } catch (err) {
-        return res.status(401).json({
+        return res.status(403).json({
           success: false,
           message: "Invalid Token",
           ERROR: err,

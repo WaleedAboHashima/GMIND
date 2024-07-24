@@ -5,6 +5,7 @@ const {
   updateCompetitionLevel,
   uploadCompetitionLevelImage,
 } = require("../../controllers");
+const { accessLevel } = require("../../controllers/competitions/level");
 const { clevelImageUpload } = require("../../middlewares/clevelImageUpload");
 
 // @Desc Get All Competition Categories
@@ -26,5 +27,5 @@ router.patch("/update-level/:levelId", updateCompetitionLevel);
 // @Resquest [PATCH]
 // @Route /api/competition/level/image-upload
 router.patch("/image-upload", clevelImageUpload, uploadCompetitionLevelImage);
-
+router.put("/access-level/:levelId/:userId", accessLevel)
 module.exports = router;

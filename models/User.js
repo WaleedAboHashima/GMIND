@@ -84,6 +84,10 @@ const userSchema = new mongoose.Schema(
     consecutive_days: { type: Number, default: 1 },
 
     opened_levels: [{ category: String, level: Number }],
+    invited_by: {
+      type: String,
+    },
+    users_invited: {type: Number, default: 0},
   },
   { timestamps: true }
 );

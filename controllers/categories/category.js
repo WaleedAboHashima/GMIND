@@ -26,7 +26,7 @@ module.exports = {
       // Check if Category With the same name Exists
       const checkCat = await Category.findOne({ category });
       if (checkCat) {
-        return res.status(400).json({
+        return res.status(409).json({
           success: false,
           message: "Category with the same name already exists",
         });
@@ -39,7 +39,7 @@ module.exports = {
       await cat
         .save()
         .then((newCat) => {
-          res.status(200).json({
+          res.status(201).json({
             success: true,
             message: "Category Added Successful",
             result: {
@@ -70,7 +70,7 @@ module.exports = {
       const { category } = req.body;
       await Category.findByIdAndUpdate(req.params.catId, { category });
       res
-        .status(200)
+        .status(202)
         .json({ success: true, result: { _id: req.params.catId } });
     } catch (err) {
       res.status(500).json({

@@ -1,20 +1,24 @@
 const Question = require("../../models/categories/Question");
 const Level = require("../../models/categories/Level");
-
+const RQuestion = require("../../models/categories/RandomQuestion");
+const Category = require("../../models/categories/Category");
 module.exports = {
   getQuestions: async (req, res) => {
     try {
+	const GetCategory = await Category.findOne({level: {$in: [req.params.levelId]}});
+      const RandomQuestionIndex = await RQuestion.find({category: GetCategory.category});
+      const randomIndex = RandomQuestionIndex.length > 0 && Math.floor(Math.random() * RandomQuestionIndex.length);
+      const RandomQuestion = RandomQuestionIndex.length > 0 && RandomQuestionIndex[randomIndex];
       await Level.findById({ _id: req.params.levelId })
         .populate({ path: "question" })
         .then(async (levelQuestions) => {
-
           let shuffled = levelQuestions.question
             .map((value) => ({ value, sort: Math.random() }))
             .sort((a, b) => a.sort - b.sort)
             .map(({ value }) => value);
 
           if (shuffled.length > 15) shuffled = shuffled.slice(0, 15);
-
+          if (RandomQuestion) shuffled.push(RandomQuestion);
           res.status(200).json({
             success: true,
             message: "Level Questions Retrieved Successfully",

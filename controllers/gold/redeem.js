@@ -37,6 +37,12 @@ module.exports = {
           message: "User not found",
         });
       }
+      if (user.users_invited < 3) {
+        return res.status(200).json({
+          success: false,
+          message: "User didn't invite enough users"
+        })
+      }
 
       const { redeemGift, gold } = req.body;
       // Check fields

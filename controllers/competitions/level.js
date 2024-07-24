@@ -4,6 +4,7 @@ const { baseURL } = process.env;
 const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
+const User = require("../../models/User");
 
 module.exports = {
   getCompetitionLevels: async (req, res) => {
@@ -160,4 +161,23 @@ module.exports = {
       });
     }
   }, // Upload Level Picture
+
+  accessLevel: async (req, res) => {
+    const {levelId, userId} = req.params;
+    try {
+      const user = await User.findById(userId);
+      const level = await CLevel.findById(levelId);
+      if (user.points < level.min_points) {
+        res.status(200).json({success: false, message: "Not enough points"})
+      }
+      else {
+        user.points = user.points -= level.min_points;
+        await user.save();
+        res.status(200).json({success: true, message: "Points removed"});
+      }
+    }
+    catch (err) {
+      res.status(500).json({success: false, message: err.message})
+    }
+  }
 };

@@ -11,7 +11,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const DB = require("./config/DBConfig");
 // const { requestLimiter } = require("./middlewares/requestLimiter");
-
 // Swagger Documentation
 // const swaggerDocs = require("./DOCS/Swagger");
 
